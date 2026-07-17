@@ -43,9 +43,18 @@ def test_ingest_rejects_unsupported_type():
     assert resp.status_code == 415
 
 
-def test_ingest_indexes_supported_file(monkeypatch):
+def test_ingest_indexes_supported_file(monkeypatch, tmp_path):
+    # Redirect uploads to a temp dir so the test leaves no artifacts behind.
+    from documind import config
+
+    config.get_settings.cache_clear()
+    monkeypatch.setenv("DOCUMIND_UPLOAD_DIR", str(tmp_path))
     monkeypatch.setattr(main, "ingest_file", lambda path: 7)
+
     files = {"file": ("notes.txt", io.BytesIO(b"hello"), "text/plain")}
     resp = _client().post("/ingest", files=files)
+
     assert resp.status_code == 200
     assert resp.json() == {"filename": "notes.txt", "chunks_indexed": 7}
+    assert (tmp_path / "notes.txt").exists()
+    config.get_settings.cache_clear()
