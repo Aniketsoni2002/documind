@@ -1,11 +1,11 @@
 # Streamlit configuration (theme + server). Applied on Streamlit Community
 # Cloud and locally when you run from the repo root.
 
+# Only the accent + font are pinned here; light/dark backgrounds are handled by
+# the app's own CSS (which follows the viewer's system preference), so we don't
+# hardcode background/text colours that would lock the app to one theme.
 [theme]
 primaryColor = "#6366f1"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f5f6fa"
-textColor = "#1f2430"
 font = "sans serif"
 
 [server]

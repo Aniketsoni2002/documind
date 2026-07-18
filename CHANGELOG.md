@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+- **Premium UI redesign** of the Streamlit app: a token-driven design system
+  (Inter + JetBrains Mono, indigo accent, cool neutrals) with full light/dark
+  theming, a brand lockup, elevated chat bubbles with an accent hairline and
+  entrance animation, a dashed hover-lit upload zone, gradient primary buttons
+  with hover/focus/active states, refined citation chips, an animated status
+  pill, and a polished empty-state hero. Presentation only — no logic changed.
+
 ### Added
 - **Swappable LLM provider** via `DOCUMIND_LLM_PROVIDER` (`ollama` | `groq`).
   The new `groq` provider uses the hosted Groq API (free tier, Llama 3.1) so the

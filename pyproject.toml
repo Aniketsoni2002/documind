@@ -64,3 +64,8 @@ select = ["E", "F", "I", "UP", "B"]
 # B008: FastAPI intentionally uses function calls (File(...), Depends(...)) in
 # argument defaults for dependency injection — this is the documented idiom.
 ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# The UI module embeds a large CSS/HTML design-system string where line length
+# is not meaningful (e.g. font-CDN URLs that can't be wrapped).
+"src/documind/ui/app.py" = ["E501"]
