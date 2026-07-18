@@ -118,14 +118,57 @@ documind ask "What is the refund policy?"
 
 ---
 
-## 🐳 Run everything with Docker
+## 🐳 Run everything with Docker (one command)
 
-Ollama + the API, one command:
+The full stack — **Ollama + REST API + Streamlit UI** — with the LLM model
+pulled automatically on first start:
 
 ```bash
 docker compose up --build
-docker compose exec ollama ollama pull llama3.2   # first time only
 ```
+
+Then open:
+
+| Service | URL |
+|---|---|
+| 💬 **Chat UI** | http://localhost:8501 |
+| 🔌 **REST API** (Swagger docs) | http://localhost:8000/docs |
+| 🧠 **Ollama** | http://localhost:11434 |
+
+To use a different local model, set it once and it will be pulled for you:
+
+```bash
+DOCUMIND_LLM_MODEL=mistral docker compose up --build
+```
+
+> First start downloads the LLM (~2 GB) and the embedding model; both are cached
+> in named volumes, so subsequent starts are fast.
+
+---
+
+## ☁️ Deploy a public app (Streamlit Community Cloud)
+
+Streamlit Cloud can't run Ollama, so the hosted app swaps the local LLM for the
+**Groq API** (free tier, Llama 3.1) while keeping local HuggingFace embeddings
+and ChromaDB. Set `DOCUMIND_LLM_PROVIDER=groq` and the app uses Groq
+automatically — no code changes.
+
+1. **Fork/own this repo** on GitHub.
+2. Get a free key at **[console.groq.com/keys](https://console.groq.com/keys)**.
+3. On **[share.streamlit.io](https://share.streamlit.io)** → *New app*:
+   - **Repository:** your fork
+   - **Main file path:** `streamlit_app.py`
+   - **Advanced settings → Python requirements file:** `requirements-cloud.txt`
+4. In the app's **Settings → Secrets**, paste:
+   ```toml
+   DOCUMIND_LLM_PROVIDER = "groq"
+   DOCUMIND_GROQ_API_KEY = "gsk_…"
+   DOCUMIND_GROQ_MODEL   = "llama-3.1-8b-instant"
+   ```
+5. Deploy — you get a public `https://<app>.streamlit.app` URL.
+
+The same `DOCUMIND_LLM_PROVIDER=groq` env var works locally and in Docker too,
+so you can run the hosted-style stack anywhere without Ollama.
 
 ---
 

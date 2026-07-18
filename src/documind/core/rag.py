@@ -10,8 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from langchain_core.documents import Document
+from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_ollama import ChatOllama
 
 from documind.config import get_settings
 from documind.core.vectorstore import get_vectorstore
@@ -53,12 +53,40 @@ def _format_context(docs: list[Document]) -> str:
     return "\n\n".join(blocks)
 
 
-def _get_llm() -> ChatOllama:
+def _get_llm() -> BaseChatModel:
+    """Build the chat model for the configured provider.
+
+    Imports are local so that, e.g., a Groq-only cloud deploy never needs the
+    Ollama client installed and vice versa.
+    """
     settings = get_settings()
-    return ChatOllama(
-        model=settings.llm_model,
-        base_url=settings.ollama_base_url,
-        temperature=settings.llm_temperature,
+    provider = settings.llm_provider.lower()
+
+    if provider == "groq":
+        from langchain_groq import ChatGroq
+
+        if not settings.groq_api_key:
+            raise RuntimeError(
+                "DOCUMIND_LLM_PROVIDER=groq but DOCUMIND_GROQ_API_KEY is not set."
+            )
+        return ChatGroq(
+            model=settings.groq_model,
+            api_key=settings.groq_api_key,
+            temperature=settings.llm_temperature,
+        )
+
+    if provider == "ollama":
+        from langchain_ollama import ChatOllama
+
+        return ChatOllama(
+            model=settings.llm_model,
+            base_url=settings.ollama_base_url,
+            temperature=settings.llm_temperature,
+        )
+
+    raise ValueError(
+        f"Unknown DOCUMIND_LLM_PROVIDER={settings.llm_provider!r}. "
+        "Use 'ollama' or 'groq'."
     )
 
 

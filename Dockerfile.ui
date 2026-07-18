@@ -1,0 +1,22 @@
+# DocuMind Streamlit UI container. Talks to the core library directly and to
+# Ollama over the network (point DOCUMIND_OLLAMA_BASE_URL at it).
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+COPY pyproject.toml requirements.txt ./
+COPY src ./src
+RUN pip install --upgrade pip && pip install -e .
+
+# HuggingFace embedding model is downloaded on first run; a volume caches it.
+EXPOSE 8501
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')" || exit 1
+
+CMD ["streamlit", "run", "src/documind/ui/app.py", \
+     "--server.address=0.0.0.0", "--server.port=8501", \
+     "--server.headless=true", "--browser.gatherUsageStats=false"]

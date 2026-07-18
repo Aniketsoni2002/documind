@@ -49,6 +49,14 @@ def add_documents(chunks: list[Document]) -> int:
     return len(chunks)
 
 
+def collection_count() -> int:
+    """Return how many chunks are currently indexed (0 if none/uninitialised)."""
+    try:
+        return get_vectorstore()._collection.count()
+    except Exception:  # pragma: no cover - store may not exist yet
+        return 0
+
+
 def clear_collection() -> None:
     """Delete all vectors (used by the 'reset' action and by tests)."""
     store = get_vectorstore()

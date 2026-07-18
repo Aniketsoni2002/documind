@@ -25,10 +25,20 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    # --- LLM provider selection -------------------------------------------
+    # "ollama" runs a fully local model (default, private). "groq" uses the
+    # hosted Groq API (free tier) so the app can run on hosts that can't run
+    # Ollama, e.g. Streamlit Community Cloud.
+    llm_provider: str = Field(default="ollama")  # "ollama" | "groq"
+    llm_temperature: float = Field(default=0.1)
+
     # --- LLM (local via Ollama) -------------------------------------------
     ollama_base_url: str = Field(default="http://localhost:11434")
     llm_model: str = Field(default="llama3.2")
-    llm_temperature: float = Field(default=0.1)
+
+    # --- LLM (hosted via Groq) --------------------------------------------
+    groq_api_key: str = Field(default="")
+    groq_model: str = Field(default="llama-3.1-8b-instant")
 
     # --- Embeddings (local via HuggingFace sentence-transformers) ---------
     embedding_model: str = Field(default="sentence-transformers/all-MiniLM-L6-v2")

@@ -1,0 +1,27 @@
+# Dependencies tuned for Streamlit Community Cloud.
+#
+# Streamlit Cloud has limited RAM/disk, so we install the CPU-only build of
+# torch (the default CUDA build is ~2 GB and breaks the build) and use the
+# hosted Groq LLM instead of Ollama.
+#
+# Streamlit Cloud installs the file named in the app's "Advanced settings"
+# (set this as the requirements file) or falls back to requirements.txt.
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch>=2.2
+
+langchain>=1.0
+langchain-community>=0.4
+langchain-core>=1.0
+langchain-text-splitters>=1.0
+langchain-chroma>=1.0
+langchain-huggingface>=1.0
+langchain-groq>=0.2
+chromadb>=0.5
+sentence-transformers>=3.0
+pypdf>=4.0
+python-multipart>=0.0.9
+streamlit>=1.36
+pydantic>=2.7
+pydantic-settings>=2.3

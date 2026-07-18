@@ -6,6 +6,7 @@ langchain-text-splitters>=1.0
 langchain-chroma>=1.0
 langchain-huggingface>=1.0
 langchain-ollama>=1.0
+langchain-groq>=0.2
 chromadb>=0.5
 sentence-transformers>=3.0
 pypdf>=4.0

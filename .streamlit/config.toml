@@ -1,0 +1,15 @@
+# Streamlit configuration (theme + server). Applied on Streamlit Community
+# Cloud and locally when you run from the repo root.
+
+[theme]
+primaryColor = "#6366f1"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f5f6fa"
+textColor = "#1f2430"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
